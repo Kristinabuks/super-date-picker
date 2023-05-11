@@ -1,0 +1,36 @@
+.timeFormatController{
+    display: flex;
+    direction: column;
+    max-width: 300px;
+    color: var(--invertial-color);
+}
+
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+
+.menuBtn {
+    width: calc(100% / 3);
+}
+
+.btn {
+    width: 100%;
+}
+
+.description{
+    text-align: center;
+}
+
+.relativeMenu {
+    display: flex;
+    max-width: 300px;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+.input {
+    width: 50%;
+}

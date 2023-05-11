@@ -1,0 +1,32 @@
+{
+  "name": "super-date-picker",
+  "version": "1.0.0",
+  "description": "Echelon's qualifying task",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx webpack serve"
+  },
+  "author": "Kristina Korennaya <kristina.korennaya@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.1.0",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@types/webpack": "^5.28.1",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.1",
+    "sass": "^1.62.1",
+    "sass-loader": "^13.2.2",
+    "style-loader": "^3.3.2",
+    "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.82.0",
+    "webpack-cli": "^5.1.0",
+    "webpack-dev-server": "^4.15.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

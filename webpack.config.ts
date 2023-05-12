@@ -1,14 +1,14 @@
-import path from "path"
-import HtmlWebpackPlugin from "html-webpack-plugin"
-import { ProgressPlugin } from "webpack"
-import webpack from "webpack"
-import type { Configuration as DevServerConfiguration } from "webpack-dev-server";
+import path from 'path'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { ProgressPlugin } from 'webpack'
+import webpack from 'webpack'
+import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 const devServer: DevServerConfiguration = {
     port: 6006,
     open: true,
     historyApiFallback: true,
-    hot: true
+    hot: true,
 }
 const config: webpack.Configuration = {
     mode: 'development',
@@ -16,30 +16,31 @@ const config: webpack.Configuration = {
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'build'),
-        clean: true
+        clean: true,
     },
     module: {
         rules: [
-        {
-            test: /\.tsx?$/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
-        },
-        {
-            test: /\.s[ac]ss$/i,
-            use: [
-                "style-loader",
-                {
-                    loader: "css-loader",
-                    options: {
-                        modules: {
-                            localIdentName: '[path][name]__local--[hash:base64:5]'
-                        } 
-                    }
-                },
-                "sass-loader",
-            ],
-        },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                localIdentName:
+                                    '[path][name]__local--[hash:base64:5]',
+                            },
+                        },
+                    },
+                    'sass-loader',
+                ],
+            },
         ],
     },
     resolve: {
@@ -47,17 +48,17 @@ const config: webpack.Configuration = {
         preferAbsolute: true,
         modules: [path.resolve(__dirname, 'src'), 'node_modules'],
         mainFiles: ['index'],
-        alias: {}
+        alias: {},
     },
     plugins: [
         new HtmlWebpackPlugin({
-        title: 'Output Management',
-        template: path.resolve(__dirname, 'public', 'index.html')
+            title: 'Output Management',
+            template: path.resolve(__dirname, 'public', 'index.html'),
         }),
-        new ProgressPlugin()
+        new ProgressPlugin(),
     ],
     devtool: 'inline-source-map',
-    devServer
-};
+    devServer,
+}
 
 export default config

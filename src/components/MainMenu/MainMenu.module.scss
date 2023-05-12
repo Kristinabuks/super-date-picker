@@ -1,8 +1,32 @@
-.mainMenu {
-    color: var(--invertial-color);
-}
-
 .container {
     display: flex;
     flex-direction: row;
+}
+
+.containerCU {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.left,
+.right {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 0 0;
+}
+
+.btn {
+    text-align: start;
+    vertical-align: middle;
+    color: var(--main-color);
+    padding-left: 0;
+}
+
+.input {
+    margin-right: 3px;
+}
+
+.btnApply {
+    margin-left: 3px;
 }

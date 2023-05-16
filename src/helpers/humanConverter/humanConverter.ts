@@ -26,15 +26,16 @@ export function convertToHuman(milliseconds: number): [number, TimeUnit] {
         TimeUnit.WEEK,
         TimeUnit.DAY,
         TimeUnit.HOUR,
+        TimeUnit.MINUTE
     ]) {
         const normTs = milliseconds / timeUnitToMilliseconds(unit)
-        if (Math.trunc(normTs) >= 1) {
+        if ((unit === TimeUnit.WEEK && Number.isInteger(normTs)) || (unit !== TimeUnit.WEEK && Math.trunc(normTs) >= 1)) {
             return [Math.round(normTs), unit]
         }
     }
 
     return [
-        Math.round(milliseconds / timeUnitToMilliseconds(TimeUnit.MINUTE)),
-        TimeUnit.MINUTE,
+        Math.round(milliseconds / timeUnitToMilliseconds(TimeUnit.SECOND)),
+        TimeUnit.SECOND,
     ]
 }

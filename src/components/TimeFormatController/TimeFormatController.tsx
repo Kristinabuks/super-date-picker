@@ -89,11 +89,19 @@ export const TimeFormatController: React.FC<TimeFormatControllerProps> = (
         }
 
         if (format == TimeFormat.ABSOLUTE) {
-            return (
-                <div className={cls.calendar}>
-                    <Calendar onSelect={handlerDate} />
-                </div>
-            )
+            if (date){
+                return (
+                    <div className={cls.calendar}>
+                        <Calendar onSelect={handlerDate} datePr={date} setRelativeTimeUnits={setRelativeTimeUnits} setRelativeDate={setRelativeDate}/>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className={cls.calendar}>
+                        <Calendar onSelect={handlerDate} setRelativeTimeUnits={setRelativeTimeUnits} setRelativeDate={setRelativeDate}/>
+                    </div>
+                )
+            }
         } else if (format == TimeFormat.RELATIVE) {
             return (
                 <div>
@@ -184,7 +192,7 @@ export const TimeFormatController: React.FC<TimeFormatControllerProps> = (
                             { [cls.active]: format === TimeFormat.ABSOLUTE },
                             [className ?? '']
                         )}
-                        onClick={() => setFormat(TimeFormat.ABSOLUTE)}
+                        onClick={() => {setFormat(TimeFormat.ABSOLUTE)}}
                     >
                         Absolute
                     </Button>
@@ -206,7 +214,7 @@ export const TimeFormatController: React.FC<TimeFormatControllerProps> = (
                             { [cls.active]: format === TimeFormat.NOW },
                             [className ?? '']
                         )}
-                        onClick={() => setFormat(TimeFormat.NOW)}
+                        onClick={() => {setFormat(TimeFormat.NOW)}}
                     >
                         Now
                     </Button>

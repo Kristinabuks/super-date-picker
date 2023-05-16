@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button } from './Button/Button'
+import { Button, ButtonTheme } from './Button/Button'
 import { classNames } from 'helpers/classNames/classNames'
 import cls from './SuperDataPicker.module.scss'
 import { Popover } from './Popover/Popover'
@@ -9,6 +9,7 @@ import {
 } from './TimeFormatController/TimeFormatController'
 import { MainMenu, TimeUnit } from './MainMenu/MainMenu'
 import { timeUnitToMilliseconds } from 'helpers/humanConverter/humanConverter'
+import { formater } from 'helpers/formater/formater'
 
 interface SuperDataPickerProps {
     start: number
@@ -50,6 +51,7 @@ export const SuperDataPicker: React.FC<SuperDataPickerProps> = (props) => {
     const start = props.start ? new Date(props.start) : null
     const end = props.end ? new Date(props.end) : null
     const { setStart, setEnd } = props
+    const [error, setError] = useState<string>()
 
     const [startMenuVisible, setStartMenuVisible] = useState(false)
     const [endMenuVisible, setEndMenuVisible] = useState(false)
@@ -139,11 +141,21 @@ export const SuperDataPicker: React.FC<SuperDataPickerProps> = (props) => {
     }
 
     const handlerStartDate = (date: Date) => {
+        if (end && Number(date) > Number(end)) {
+            setError(`Invalid start value: ${date.toLocaleString()}`)
+            return
+        }
         setStart(Number(date))
+        setError('')
     }
 
     const handlerEndDate = (date: Date) => {
+        if (start && Number(date) < Number(start)) {
+            setError(`Invalid end value: ${date.toLocaleString()}`)
+            return
+        }
         setEnd(Number(date))
+        setError('')
     }
 
     function setFields(
@@ -167,72 +179,75 @@ export const SuperDataPicker: React.FC<SuperDataPickerProps> = (props) => {
     }
 
     return (
-        <div className={classNames(cls.superDataPicker)}>
-            <div className={cls.leftContainer}>
-                <Button className={cls.btn} onClick={handlerMenu}>
-                    Menu
-                </Button>
-                <Popover
-                    isOpen={mainMenuVisible}
-                    onClose={() => setMainMenuVisible(false)}
-                >
-                    <MainMenu
-                        handlerDateStart={handlerStartDate}
-                        handlerDateEnd={handlerEndDate}
-                        relativeDateStart={relativeDateStart}
-                        relativeTimeUnitsStart={relativeTimeUnitsStart}
-                        relativeDateEnd={relativeDateEnd}
-                        relativeTimeUnitsEnd={relativeTimeUnitsEnd}
-                        setFields={setFields}
-                        refreshDate={refreshDate}
-                        setRefreshDate={setRefreshDate}
-                        refreshTimeUnits={refreshTimeUnits}
-                        setRefreshTimeUnits={setRefreshTimeUnits}
-                    />
-                </Popover>
-            </div>
-            <div className={classNames(cls.rightContainer)}>
-                <div className={cls.startTime}>
-                    <Button className={cls.btn} onClick={handlerStart}>
-                        {start && start.toLocaleString()}
+        <div>
+            <div className={classNames(cls.superDataPicker)}>
+                <div className={cls.leftContainer}>
+                    <Button theme={ButtonTheme.OUTLINE} className={cls.btn} onClick={handlerMenu}>
+                        Menu
                     </Button>
                     <Popover
-                        isOpen={startMenuVisible}
-                        onClose={() => setStartMenuVisible(false)}
+                        isOpen={mainMenuVisible}
+                        onClose={() => setMainMenuVisible(false)}
                     >
-                        <TimeFormatController
-                            handlerDate={handlerStartDate}
-                            date={start}
-                            format={formatStart}
-                            setFormat={setFormatStart}
-                            relativeDate={relativeDateStart}
-                            setRelativeDate={setRelativeDateStart}
-                            relativeTimeUnits={relativeTimeUnitsStart}
-                            setRelativeTimeUnits={setRelativeTimeUnitsStart}
+                        <MainMenu
+                            handlerDateStart={handlerStartDate}
+                            handlerDateEnd={handlerEndDate}
+                            relativeDateStart={relativeDateStart}
+                            relativeTimeUnitsStart={relativeTimeUnitsStart}
+                            relativeDateEnd={relativeDateEnd}
+                            relativeTimeUnitsEnd={relativeTimeUnitsEnd}
+                            setFields={setFields}
+                            refreshDate={refreshDate}
+                            setRefreshDate={setRefreshDate}
+                            refreshTimeUnits={refreshTimeUnits}
+                            setRefreshTimeUnits={setRefreshTimeUnits}
                         />
                     </Popover>
                 </div>
-                <div className={cls.endTime}>
-                    <Button className={cls.btn} onClick={handlerEnd}>
-                        {end && end.toLocaleString()}
-                    </Button>
-                    <Popover
-                        isOpen={endMenuVisible}
-                        onClose={() => setEndMenuVisible(false)}
-                    >
-                        <TimeFormatController
-                            handlerDate={handlerEndDate}
-                            date={end}
-                            format={formatEnd}
-                            setFormat={setFormatEnd}
-                            relativeDate={relativeDateEnd}
-                            setRelativeDate={setRelativeDateEnd}
-                            relativeTimeUnits={relativeTimeUnitsEnd}
-                            setRelativeTimeUnits={setRelativeTimeUnitsEnd}
-                        />
-                    </Popover>
+                <div className={classNames(cls.rightContainer)}>
+                    <div className={cls.startTime}>
+                        <Button theme={ButtonTheme.OUTLINE} className={cls.btn} onClick={handlerStart}>
+                            {start && formater(formatStart, relativeDateStart, relativeTimeUnitsStart, start)}
+                        </Button>
+                        <Popover
+                            isOpen={startMenuVisible}
+                            onClose={() => setStartMenuVisible(false)}
+                        >
+                            <TimeFormatController
+                                handlerDate={handlerStartDate}
+                                date={start}
+                                format={formatStart}
+                                setFormat={setFormatStart}
+                                relativeDate={relativeDateStart}
+                                setRelativeDate={setRelativeDateStart}
+                                relativeTimeUnits={relativeTimeUnitsStart}
+                                setRelativeTimeUnits={setRelativeTimeUnitsStart}
+                            />
+                        </Popover>
+                    </div>
+                    <div className={cls.endTime}>
+                        <Button theme={ButtonTheme.OUTLINE} className={cls.btn} onClick={handlerEnd}>
+                            {end && formater(formatEnd, relativeDateEnd, relativeTimeUnitsEnd, end)}
+                        </Button>
+                        <Popover
+                            isOpen={endMenuVisible}
+                            onClose={() => setEndMenuVisible(false)}
+                        >
+                            <TimeFormatController
+                                handlerDate={handlerEndDate}
+                                date={end}
+                                format={formatEnd}
+                                setFormat={setFormatEnd}
+                                relativeDate={relativeDateEnd}
+                                setRelativeDate={setRelativeDateEnd}
+                                relativeTimeUnits={relativeTimeUnitsEnd}
+                                setRelativeTimeUnits={setRelativeTimeUnitsEnd}
+                            />
+                        </Popover>
+                    </div>
                 </div>
             </div>
+            <div className={cls.error}>{error}</div>
         </div>
     )
 }

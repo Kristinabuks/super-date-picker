@@ -5,9 +5,28 @@
     cursor: pointer;
 }
 
+.fullwidth {
+    width: 100%;
+}
+
+.day {
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
 .active {
     background: var(--main-color);
     color: var(--invertial-color);
+}
+
+.today {
+    background-color: var(--today-color);
+    color: var(--invertial-color);
+}
+
+.inactive {
+    color: var(--inactive-color);
 }
 
 .calendarPicker {
@@ -59,4 +78,18 @@
     width: calc(100% / 7);
     text-align: center;
     vertical-align: middle;
+}
+
+.styledScrollbars {
+    scrollbar-color: #999 #ffffff00;
+}
+.styledScrollbars::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+}
+.styledScrollbars::-webkit-scrollbar-thumb {
+    background: #999;
+}
+.styledScrollbars::-webkit-scrollbar-track {
+    background: #ffffff00;
 }

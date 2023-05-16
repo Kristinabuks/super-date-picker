@@ -10,9 +10,12 @@
     --font-l: var(--font-size-l) / var(--font-line-l) var(--font-family-main);
 
     --main-color: rgb(38, 117, 196);
+    --inactive-color: rgb(114, 114, 114);
     --invertial-color: rgb(255, 255, 255);
     --second-color: rgb(184, 208, 240);
     --background-color: rgb(209, 224, 244);
+    --today-color: rgb(38, 164, 196);
+    --error: #ff0000;
 }
 
 * {

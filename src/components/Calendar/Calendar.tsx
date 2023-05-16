@@ -2,10 +2,16 @@ import { classNames } from 'helpers/classNames/classNames'
 import cls from './Calendar.module.scss'
 import { useState } from 'react'
 import { Button, ButtonTheme } from 'components/Button/Button'
+import { TimeUnitR } from 'components/SuperDataPicker'
+import { convertToHuman } from 'helpers/humanConverter/humanConverter'
+import { TimeUnit } from 'components/MainMenu/MainMenu'
 
 interface CalendarProps {
     className?: string
     onSelect: (date: Date) => void
+    datePr?: Date
+    setRelativeTimeUnits: (relativeTimeUnits: TimeUnitR) => void
+    setRelativeDate: (relativeDate: number) => void
 }
 
 const months: string[] = [
@@ -152,7 +158,9 @@ const CalendarPicker = ({
                         <thead>
                             <tr>
                                 {days.map((day) => (
-                                    <td key={day}>{day}</td>
+                                    <td className={cls.day} key={day}>
+                                        {day}
+                                    </td>
                                 ))}
                             </tr>
                         </thead>
@@ -171,6 +179,9 @@ const CalendarPicker = ({
                                                 className={classNames(cls.btn, {
                                                     [cls.active]:
                                                         isPickedDay(cell),
+                                                    [cls.inactive]:
+                                                        cell.getMonth() !=
+                                                        date.getMonth()
                                                 })}
                                                 onClick={() => {
                                                     const newDate = new Date(
@@ -199,13 +210,22 @@ const CalendarPicker = ({
                 </div>
             </div>
             <div className={cls.selectTime}>
-                <ol className={cls.time}>
+                <ol
+                    className={classNames(cls.time, {}, [cls.styledScrollbars])}
+                >
                     {generateTimestamps().map(([hours, minutes]) => (
                         <li key={`${hours}:${minutes}`}>
                             <button
-                                className={classNames(cls.btn, {
-                                    [cls.active]: isPickedTime(hours, minutes),
-                                })}
+                                className={classNames(
+                                    cls.btn,
+                                    {
+                                        [cls.active]: isPickedTime(
+                                            hours,
+                                            minutes
+                                        ),
+                                    },
+                                    [cls.fullwidth]
+                                )}
                                 onClick={() => {
                                     const newDate = new Date(date)
                                     newDate.setHours(hours)
@@ -302,12 +322,22 @@ enum CalendarPickerMode {
 }
 
 export const Calendar: React.FC<CalendarProps> = (props) => {
-    const { className, onSelect } = props
+    const { className, onSelect, datePr = new Date(), setRelativeTimeUnits, setRelativeDate } = props
 
     const [mode, setMode] = useState<CalendarPickerMode>(
         CalendarPickerMode.FULL
     )
-    const [date, setDate] = useState<Date>(new Date())
+    const [date, setDate] = useState<Date>(datePr)
+    const today = new Date()
+
+    function humanDiff(start: Date, end: Date): [[number, TimeUnit], number]{
+        if (end >= start){
+            return [convertToHuman(Number(end) - Number(start)), 0] 
+        }
+        if (start > end){
+            return [convertToHuman(Number(start) - Number(end)), 7]
+        }
+    }
 
     let currentPicker
     switch (mode) {
@@ -318,6 +348,10 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                     setDate={(pickedDate) => {
                         setDate(new Date(pickedDate))
                         onSelect(new Date(pickedDate))
+                        let [diff, count] = humanDiff(pickedDate, today)
+                        let [diffCount, diffTimeUnit] = diff
+                        setRelativeTimeUnits(diffTimeUnit + count)
+                        setRelativeDate(diffCount)
                     }}
                     onModeChange={setMode}
                 />
@@ -333,6 +367,10 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                         setDate(newDate)
                         onSelect(new Date(newDate))
                         setMode(CalendarPickerMode.FULL)
+                        let [diff, count] = humanDiff(newDate, today)
+                        let [diffCount, diffTimeUnit] = diff
+                        setRelativeTimeUnits(diffTimeUnit + count)
+                        setRelativeDate(diffCount)
                     }}
                 />
             )
@@ -346,6 +384,10 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                         setDate(newDate)
                         onSelect(new Date(newDate))
                         setMode(CalendarPickerMode.FULL)
+                        let [diff, count] = humanDiff(newDate, today)
+                        let [diffCount, diffTimeUnit] = diff
+                        setRelativeTimeUnits(diffTimeUnit + count)
+                        setRelativeDate(diffCount)
                     }}
                 />
             )
@@ -355,7 +397,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     return (
         <div className={classNames(cls.Calendar, {}, [className ?? ''])}>
             {currentPicker}
-            {date.toLocaleString()}
+            {datePr ? datePr.toLocaleString(): date.toLocaleString()}
         </div>
     )
 }

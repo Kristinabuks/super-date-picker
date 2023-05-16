@@ -253,7 +253,7 @@ export const MainMenu: React.FC<MainMenuProps> = (props) => {
             diffCountStart,
             diffTimeUnitStart % 12,
             diffCountEnd,
-            diffTimeUnitEnd + 7
+            diffTimeUnitEnd + 0
         )
     }
 
